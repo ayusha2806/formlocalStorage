@@ -24,6 +24,33 @@ function deleteUser(index) {
   displayUserDetails();
 }
 
+// Function to edit user by index
+function editUser(index) {
+  // Get the stored user details from local storage
+  let storedUserDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
+
+  // Make sure storedUserDetails is an array
+  if (!Array.isArray(storedUserDetails)) {
+    storedUserDetails = [];
+  }
+
+  // Retrieve the user entry at the specified index
+  const userToEdit = storedUserDetails[index];
+
+  // Populate form fields with the existing data
+  nameInput.value = userToEdit.name;
+  emailInput.value = userToEdit.email;
+
+  // Remove the user entry at the specified index
+  storedUserDetails.splice(index, 1);
+
+  // Update local storage with the modified array
+  localStorage.setItem('userDetails', JSON.stringify(storedUserDetails));
+
+  // Display the updated user details
+  displayUserDetails();
+}
+
 // Function to display user details on the screen
 function displayUserDetails() {
   const userContainer = document.getElementById('user-list');
@@ -41,6 +68,7 @@ function displayUserDetails() {
       <p>User ${index + 1}:</p>
       <p>Name: ${user.name}</p>
       <p>Email: ${user.email}</p>
+      <button class="edit-btn" onclick="editUser(${index})">Edit</button>
       <button class="delete-btn" onclick="deleteUser(${index})">Delete</button>
     `;
     userContainer.appendChild(userItem);
