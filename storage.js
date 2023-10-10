@@ -15,18 +15,37 @@ function onSubmit(e) {
     msg.innerHTML = 'Please enter all fields';
     setTimeout(() => msg.remove(), 3000);
   } else {
-    // Store user details in local storage
+    // Create an object to store user details
     const userDetails = {
       name: nameInput.value,
       email: emailInput.value,
     };
-    // Convert the object to a JSON string
-    const userDetailsJSON = JSON.stringify(userDetails);
-    // Store the JSON string in local storage
-    localStorage.setItem('userDetails', userDetailsJSON);
+
+    // Call a separate function to add user details to local storage
+    addToLocalStorage(userDetails);
 
     // Clear fields
     nameInput.value = '';
     emailInput.value = '';
   }
+}
+
+// Function to add new user details to local storage
+function addToLocalStorage(userDetails) {
+  // Check if there are existing user details in local storage
+  let storedUserDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
+
+  // Make sure storedUserDetails is an array
+  if (!Array.isArray(storedUserDetails)) {
+    storedUserDetails = [];
+  }
+
+  // Add the new user details to the existing array
+  storedUserDetails.push(userDetails);
+
+  // Convert the array to a JSON string
+  const userDetailsJSON = JSON.stringify(storedUserDetails);
+
+  // Store the JSON string in local storage
+  localStorage.setItem('userDetails', userDetailsJSON);
 }
