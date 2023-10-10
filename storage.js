@@ -4,6 +4,52 @@ const nameInput = document.querySelector('#name');
 const emailInput = document.querySelector('#email');
 const msg = document.querySelector('.msg');
 
+// Function to delete user by index
+function deleteUser(index) {
+  // Get the stored user details from local storage
+  let storedUserDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
+
+  // Make sure storedUserDetails is an array
+  if (!Array.isArray(storedUserDetails)) {
+    storedUserDetails = [];
+  }
+
+  // Remove the user entry at the specified index
+  storedUserDetails.splice(index, 1);
+
+  // Update local storage with the modified array
+  localStorage.setItem('userDetails', JSON.stringify(storedUserDetails));
+
+  // Display the updated user details
+  displayUserDetails();
+}
+
+// Function to display user details on the screen
+function displayUserDetails() {
+  const userContainer = document.getElementById('user-list');
+
+  // Get the user details from local storage
+  const storedUserDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
+
+  // Clear the existing content in the userContainer
+  userContainer.innerHTML = '';
+
+  // Loop through the user details and create list items to display them
+  storedUserDetails.forEach((user, index) => {
+    const userItem = document.createElement('div');
+    userItem.innerHTML = `
+      <p>User ${index + 1}:</p>
+      <p>Name: ${user.name}</p>
+      <p>Email: ${user.email}</p>
+      <button class="delete-btn" onclick="deleteUser(${index})">Delete</button>
+    `;
+    userContainer.appendChild(userItem);
+  });
+}
+
+// Call the displayUserDetails function to initially display user details
+displayUserDetails();
+
 // Listen for form submit
 myForm.addEventListener('submit', onSubmit);
 
@@ -52,24 +98,3 @@ function addToLocalStorage(userDetails) {
   // Store the JSON string in local storage
   localStorage.setItem('userDetails', userDetailsJSON);
 }
-
-// Function to display user details on the screen
-function displayUserDetails() {
-  const userContainer = document.getElementById('user-list');
-
-  // Get the user details from local storage
-  const storedUserDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
-
-  // Clear the existing content in the userContainer
-  userContainer.innerHTML = '';
-
-  // Loop through the user details and create list items to display them
-  storedUserDetails.forEach((user, index) => {
-    const userItem = document.createElement('div');
-    userItem.innerHTML = `<p>User ${index + 1}:</p><p>Name: ${user.name}</p><p>Email: ${user.email}</p>`;
-    userContainer.appendChild(userItem);
-  });
-}
-
-// Call the displayUserDetails function to initially display user details
-displayUserDetails();
