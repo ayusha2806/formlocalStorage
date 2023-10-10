@@ -27,6 +27,9 @@ function onSubmit(e) {
     // Clear fields
     nameInput.value = '';
     emailInput.value = '';
+
+    // Update the displayed user details
+    displayUserDetails();
   }
 }
 
@@ -49,3 +52,24 @@ function addToLocalStorage(userDetails) {
   // Store the JSON string in local storage
   localStorage.setItem('userDetails', userDetailsJSON);
 }
+
+// Function to display user details on the screen
+function displayUserDetails() {
+  const userContainer = document.getElementById('user-list');
+
+  // Get the user details from local storage
+  const storedUserDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
+
+  // Clear the existing content in the userContainer
+  userContainer.innerHTML = '';
+
+  // Loop through the user details and create list items to display them
+  storedUserDetails.forEach((user, index) => {
+    const userItem = document.createElement('div');
+    userItem.innerHTML = `<p>User ${index + 1}:</p><p>Name: ${user.name}</p><p>Email: ${user.email}</p>`;
+    userContainer.appendChild(userItem);
+  });
+}
+
+// Call the displayUserDetails function to initially display user details
+displayUserDetails();
